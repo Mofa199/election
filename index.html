@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAJUHESO Election 2024/2025</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* --- COLOR THEME --- */
+            --primary-teal: #0E4E58;  /* Deep Teal from Poster */
+            --accent-gold: #F39C12;   /* Orange/Gold from Poster */
+            --text-dark: #052c33;
+            --white: #ffffff;
+            --light-gray: #f4f4f4;
+        }
+
+        body {
+            font-family: 'Roboto Condensed', sans-serif;
+            background-color: var(--primary-teal);
+            background-image: linear-gradient(135deg, #0b4049 0%, #115d69 100%);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: var(--text-dark);
+        }
+
+        /* --- HEADER --- */
+        .header {
+            background: var(--white);
+            padding: 20px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 6px solid var(--accent-gold);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            z-index: 10;
+        }
+
+        .header-logo { height: 85px; width: auto; }
+        
+        .header-text { text-align: center; flex-grow: 1; }
+        .header-text h1 { 
+            color: var(--primary-teal); 
+            margin: 0; 
+            font-size: 2.2rem; 
+            text-transform: uppercase; 
+            letter-spacing: 1px; 
+            line-height: 1.1;
+        }
+        .header-text h3 { 
+            color: var(--accent-gold); 
+            margin: 8px 0 0; 
+            font-weight: 700; 
+            text-transform: uppercase; 
+        }
+
+        /* --- MAIN CONTENT --- */
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            flex-grow: 1;
+            padding: 0 20px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .tickets-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 50px;
+            margin-bottom: 50px;
+        }
+
+        /* --- TICKET CARD --- */
+        .ticket-card {
+            background: var(--white);
+            border-radius: 4px;
+            width: 450px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            overflow: hidden;
+            position: relative;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .ticket-card:hover { transform: translateY(-5px); }
+        
+        .ticket-card.winner { 
+            border: 4px solid var(--accent-gold); 
+            box-shadow: 0 0 30px rgba(243, 156, 18, 0.6);
+        }
+
+        .winner-badge {
+            position: absolute; top: 15px; right: 15px;
+            background: var(--accent-gold); color: var(--white);
+            padding: 6px 18px; font-weight: bold; border-radius: 4px;
+            z-index: 10; display: none; text-transform: uppercase; letter-spacing: 1px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .ticket-images { display: flex; height: 260px; border-bottom: 5px solid var(--accent-gold); }
+        .img-box { flex: 1; position: relative; }
+        .img-box img { width: 100%; height: 100%; object-fit: cover; }
+        
+        .role-tag {
+            position: absolute; bottom: 0; left: 0; width: 100%;
+            background: rgba(14, 78, 88, 0.9); color: white;
+            text-align: center; font-size: 0.85rem; padding: 6px 0; font-weight: bold; letter-spacing: 0.5px;
+        }
+
+        .card-body { padding: 25px; text-align: center; }
+        .names h2 { margin: 0; color: var(--primary-teal); font-size: 1.8rem; text-transform: uppercase; }
+        .names h4 { margin: 5px 0 20px; color: var(--accent-gold); font-weight: bold; font-size: 1.1rem; text-transform: uppercase; }
+
+        /* --- STATS BOX --- */
+        .vote-count-box {
+            background: var(--light-gray);
+            border-radius: 6px;
+            padding: 15px 20px;
+            margin-top: 15px;
+            border: 1px solid #ddd;
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 5px;
+        }
+
+        .big-number {
+            font-size: 3.2rem;
+            font-weight: 700;
+            color: var(--primary-teal);
+            line-height: 1;
+        }
+
+        .percentage-text {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent-gold);
+            line-height: 1;
+        }
+        
+        .stat-labels {
+            display: flex; justify-content: space-between; 
+            font-size: 0.8rem; color: #666; text-transform: uppercase; font-weight: bold;
+        }
+
+        .progress-bar {
+            height: 10px; background: #dcdcdc; border-radius: 5px; margin-top: 12px; overflow: hidden;
+        }
+        .progress-fill { height: 100%; background: var(--accent-gold); width: 0%; transition: width 1s ease; }
+
+        /* --- CLASS BREAKDOWN SECTION --- */
+        .breakdown-section {
+            background: var(--white);
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-top: 30px;
+        }
+
+        .section-title {
+            color: var(--primary-teal);
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            border-bottom: 2px solid var(--accent-gold);
+            padding-bottom: 10px;
+            margin: 0 0 20px 0;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .class-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 15px;
+        }
+
+        .class-card {
+            background: var(--light-gray);
+            border-left: 5px solid var(--primary-teal);
+            padding: 12px;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .class-name {
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: var(--primary-teal);
+            margin-bottom: 8px;
+            display: block;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 4px;
+        }
+
+        .candidate-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            margin-bottom: 4px;
+            color: #444;
+        }
+
+        /* --- FOOTER --- */
+        .footer-section {
+            background: var(--white);
+            padding: 40px 20px 25px;
+            text-align: center;
+            position: relative;
+            margin-top: auto;
+        }
+        .footer-section::before {
+            content: ''; position: absolute; top: -20px; left: 0; right: 0; height: 20px;
+            background: var(--white); border-radius: 50% 50% 0 0 / 100% 100% 0 0; transform: scaleX(1.1);
+        }
+
+        .signature-area { margin-bottom: 30px; }
+        .signature-title { font-size: 1rem; font-weight: bold; color: var(--primary-teal); margin-bottom: 20px; text-transform: uppercase; }
+        .signature-line { width: 250px; border-bottom: 2px solid var(--primary-teal); margin: 0 auto 10px; }
+        .signature-name { font-weight: 700; font-size: 1.3rem; color: var(--primary-teal); text-transform: uppercase; }
+        .signature-role { color: #666; font-size: 0.95rem; font-style: italic; }
+
+        .admin-trigger {
+            background-color: var(--accent-gold);
+            color: var(--white);
+            padding: 10px 25px;
+            border-radius: 4px;
+            text-decoration: none;
+            cursor: pointer;
+            font-weight: bold;
+            text-transform: uppercase;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+        .admin-trigger:hover { transform: translateY(-2px); background-color: #d68910; }
+
+        /* --- ADMIN MODAL --- */
+        #admin-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(14, 78, 88, 0.95); z-index: 1000; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
+        .admin-content { background: white; padding: 30px; border-radius: 8px; width: 400px; max-width: 90%; border-top: 5px solid var(--accent-gold); box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
+        .form-control { width: 100%; padding: 12px; margin-bottom: 15px; border: 2px solid #ddd; border-radius: 4px; box-sizing: border-box; font-size: 1rem; }
+        .form-control:focus { border-color: var(--accent-gold); outline: none; }
+        .btn { width: 100%; padding: 12px; cursor: pointer; font-weight: bold; margin-bottom: 10px; border-radius: 4px; border: none; text-transform: uppercase; }
+        .btn-primary { background: var(--primary-teal); color: white; }
+        .btn-primary:hover { background: #0b3c44; }
+        .loader { border: 4px solid #f3f3f3; border-top: 4px solid var(--accent-gold); border-radius: 50%; width: 25px; height: 25px; animation: spin 1s linear infinite; margin: 10px auto; display: none; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <img src="https://via.placeholder.com/120?text=SAJUHESO" class="header-logo" alt="SAJUHESO">
+        <div class="header-text">
+            <h1>SAJUHESO General Election</h1>
+            <h3>Electoral Committee Report 2024/2025</h3>
+        </div>
+        <img src="https://via.placeholder.com/120?text=SJUCHAS" class="header-logo" alt="SJUCHAS">
+    </div>
+
+    <div class="container">
+        <div class="tickets-container">
+            
+            <div class="ticket-card" id="card-0">
+                <div class="winner-badge" id="badge-0"><i class="fas fa-check-circle"></i> Leading</div>
+                <div class="ticket-images">
+                    <div class="img-box">
+                        <img src="images/farouk.jpg" onerror="this.src='https://via.placeholder.com/200?text=Farouk'">
+                        <div class="role-tag">PRESIDENT</div>
+                    </div>
+                    <div class="img-box">
+                        <img src="images/francisca.jpg" onerror="this.src='https://via.placeholder.com/200?text=Francisca'">
+                        <div class="role-tag">VICE PRES</div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="names">
+                        <h2>Farouk Hussein</h2>
+                        <h4>Franscisca P Msoma</h4>
+                    </div>
+                    <div class="vote-count-box">
+                        <div class="stat-row">
+                            <div class="big-number" id="votes-0">0</div>
+                            <div class="percentage-text" id="pct-0">0%</div>
+                        </div>
+                        <div class="stat-labels">
+                            <span>Total Votes</span>
+                            <span>Share</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="bar-0"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ticket-card" id="card-1">
+                <div class="winner-badge" id="badge-1"><i class="fas fa-check-circle"></i> Leading</div>
+                <div class="ticket-images">
+                    <div class="img-box">
+                        <img src="images/amosi.jpg" onerror="this.src='https://via.placeholder.com/200?text=Amosi'">
+                        <div class="role-tag">PRESIDENT</div>
+                    </div>
+                    <div class="img-box">
+                        <img src="images/nasri.jpg" onerror="this.src='https://via.placeholder.com/200?text=Nasri'">
+                        <div class="role-tag">VICE PRES</div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="names">
+                        <h2>Amosi K Ndamo</h2>
+                        <h4>Nasri Ally Said</h4>
+                    </div>
+                    <div class="vote-count-box">
+                        <div class="stat-row">
+                            <div class="big-number" id="votes-1">0</div>
+                            <div class="percentage-text" id="pct-1">0%</div>
+                        </div>
+                        <div class="stat-labels">
+                            <span>Total Votes</span>
+                            <span>Share</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="bar-1"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="breakdown-section">
+            <h2 class="section-title"><i class="fas fa-chart-bar"></i> Votes per Class Breakdown</h2>
+            <div class="class-grid" id="class-grid">
+                <p style="color:#666; font-style:italic;">Loading class data...</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-section">
+        <div class="signature-area">
+            <div class="signature-title">Approved by:</div>
+            <div class="signature-line"></div>
+            <div class="signature-name">Kaiza Bikombo</div>
+            <div class="signature-role">Chairperson Electoral Committee</div>
+        </div>
+        
+        <div class="admin-trigger" onclick="openAdmin()">
+            <i class="fas fa-lock"></i> Admin Panel
+        </div>
+    </div>
+
+    <div id="admin-modal">
+        <div class="admin-content">
+            <h3 style="color:var(--primary-teal); text-align:center; margin-top:0;">ADD NEW VOTES</h3>
+            
+            <label style="font-weight:bold; color:#0E4E58;">Ticket:</label>
+            <select id="admin-candidate" class="form-control">
+                <option value="Farouk">Farouk & Franscisca</option>
+                <option value="Amosi">Amosi & Nasri</option>
+            </select>
+            
+            <label style="font-weight:bold; color:#0E4E58;">Class:</label>
+            <select id="admin-class" class="form-control">
+                <option value="MD1">MD1</option><option value="MD2">MD2</option>
+                <option value="MD3">MD3</option><option value="MD4">MD4</option>
+                <option value="MD5">MD5</option><option value="PST4">PST4</option>
+                <option value="PST5">PST5</option><option value="PST6">PST6</option>
+                <option value="ODN1">ODN1</option><option value="ODN2">ODN2</option>
+                <option value="ODN3">ODN3</option>
+            </select>
+            
+            <label style="font-weight:bold; color:#0E4E58;">Vote Count:</label>
+            <input type="number" id="admin-votes" class="form-control" placeholder="e.g. 45">
+            
+            <div class="loader" id="submit-loader"></div>
+
+            <button class="btn btn-primary" onclick="submitVotes()">SUBMIT DATA</button>
+            <button class="btn" style="background:#ddd; color:#333;" onclick="closeAdmin()">CANCEL</button>
+        </div>
+    </div>
+
+    <script>
+        // --- YOUR CONNECTED GOOGLE SHEET URL ---
+        const API_URL = "https://script.google.com/macros/s/AKfycbwI53k7F8mqZZr-8MjCNGZ4JcalzKx5PiA7_PcEFo-lXsYht9gxgY9A-Kiyuzsz80Jg/exec"; 
+
+        async function fetchResults() {
+            try {
+                const response = await fetch(API_URL);
+                const data = await response.json();
+                updateDisplay(data);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+                // Optional: Show error on screen if needed
+            }
+        }
+
+        function updateDisplay(data) {
+            // 1. Update Main Cards
+            const v0 = data.totals["0"] || 0; // Farouk
+            const v1 = data.totals["1"] || 0; // Amosi
+            const total = v0 + v1;
+            
+            const p0 = total > 0 ? ((v0/total)*100).toFixed(1) : 0;
+            const p1 = total > 0 ? ((v1/total)*100).toFixed(1) : 0;
+
+            // Update Text
+            document.getElementById('votes-0').innerText = v0;
+            document.getElementById('pct-0').innerText = p0 + "%";
+            document.getElementById('bar-0').style.width = p0 + "%";
+
+            document.getElementById('votes-1').innerText = v1;
+            document.getElementById('pct-1').innerText = p1 + "%";
+            document.getElementById('bar-1').style.width = p1 + "%";
+
+            // Winner logic (Highlight card)
+            document.getElementById('badge-0').style.display = 'none';
+            document.getElementById('badge-1').style.display = 'none';
+            document.getElementById('card-0').classList.remove('winner');
+            document.getElementById('card-1').classList.remove('winner');
+
+            if (total > 0) {
+                if (v0 > v1) {
+                    document.getElementById('badge-0').style.display = 'block';
+                    document.getElementById('card-0').classList.add('winner');
+                } else if (v1 > v0) {
+                    document.getElementById('badge-1').style.display = 'block';
+                    document.getElementById('card-1').classList.add('winner');
+                }
+            }
+
+            // 2. Update Class Breakdown Grid
+            const grid = document.getElementById('class-grid');
+            grid.innerHTML = ''; // Clear previous
+
+            // Check if classes exist in data
+            if (!data.classes || Object.keys(data.classes).length === 0) {
+                grid.innerHTML = "<p style='color:#666;'>No class data recorded yet.</p>";
+                return;
+            }
+
+            const classes = Object.keys(data.classes).sort();
+
+            classes.forEach(cls => {
+                const cData = data.classes[cls];
+                const fVotes = cData["Farouk"] || 0;
+                const aVotes = cData["Amosi"] || 0;
+
+                // Create the little box for each class
+                const box = document.createElement('div');
+                box.className = 'class-card';
+                box.innerHTML = `
+                    <span class="class-name">${cls}</span>
+                    <div class="candidate-row">
+                        <span>Farouk:</span> <b style="color:var(--primary-teal)">${fVotes}</b>
+                    </div>
+                    <div class="candidate-row">
+                        <span>Amosi:</span> <b style="color:var(--primary-teal)">${aVotes}</b>
+                    </div>
+                `;
+                grid.appendChild(box);
+            });
+        }
+
+        // --- ADMIN MODAL LOGIC ---
+        function openAdmin() {
+            const pass = prompt("Enter Administrator Password:");
+            if (pass === "electoralcommittee2@2$") {
+                document.getElementById('admin-modal').style.display = 'flex';
+            } else {
+                alert("Access Denied");
+            }
+        }
+
+        function closeAdmin() {
+            document.getElementById('admin-modal').style.display = 'none';
+        }
+
+        function submitVotes() {
+            const candidate = document.getElementById('admin-candidate').value;
+            const className = document.getElementById('admin-class').value;
+            const votes = document.getElementById('admin-votes').value;
+
+            if(!votes) {
+                alert("Please enter a vote count.");
+                return;
+            }
+
+            // Show loader
+            document.getElementById('submit-loader').style.display = 'block';
+
+            const payload = {
+                candidateName: candidate,
+                className: className,
+                voteCount: votes
+            };
+
+            fetch(API_URL, {
+                method: "POST",
+                body: JSON.stringify(payload)
+            })
+            .then(res => res.json())
+            .then(data => {
+                alert("Votes Submitted Successfully!");
+                document.getElementById('submit-loader').style.display = 'none';
+                document.getElementById('admin-votes').value = ''; // Clear input
+                fetchResults(); // Refresh data immediately
+            })
+            .catch(err => {
+                alert("Error submitting votes. Check internet connection.");
+                console.error(err);
+                document.getElementById('submit-loader').style.display = 'none';
+            });
+        }
+
+        // Auto-refresh every 5 seconds
+        setInterval(fetchResults, 5000);
+        
+        // Initial load
+        fetchResults();
+
+    </script>
+</body>
+</html>
